@@ -1,8 +1,9 @@
-name: Build Windows EXE (Electron + Vite)
+name: Build Windows App
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -10,13 +11,13 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: 18
 
       - name: Install dependencies
         run: npm install
@@ -24,13 +25,21 @@ jobs:
       - name: Build Vite app
         run: npm run build
 
-      - name: Package Electron app
-        run: npx electron-builder --win --x64
-        env:
-          CSC_IDENTITY_AUTO_DISCOVERY: false
+      - name: Verify dist folder
+        run: |
+          if (Test-Path dist) {
+            Write-Host "✅ Dist folder exists."
+            Get-ChildItem dist
+          } else {
+            Write-Host "❌ Dist folder missing!"
+            exit 1
+          }
 
-      - name: Upload EXE artifact
+      - name: Build Electron Windows executable
+        run: npx electron-builder --win
+
+      - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Windows-Installer
-          path: dist/*.exe
+          name: AI-Construction-BOQ-Manager
+          path: dist-electron/**
