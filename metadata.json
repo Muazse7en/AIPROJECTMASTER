@@ -1,0 +1,5 @@
+{
+  "name": "AI Construction BOQ Manager",
+  "description": "An AI-powered web application for construction project management to manage Bill of Quantities (BOQ) and Scope of Work (SOW). Features include AI-assisted SOW/manpower analysis, price estimation, editable fields, Excel export, and detailed rate breakdowns.",
+  "requestFramePermissions": []
+}
